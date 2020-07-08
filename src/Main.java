@@ -1,10 +1,15 @@
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.*;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 
 public class Main {
 
     public static void main(String[] args) {
+
 
         try (FileReader reader = new FileReader("file1.txt")) {
             StringBuilder builder = new StringBuilder();
@@ -14,18 +19,26 @@ public class Main {
                 builder.append((char)a);
             }
 
-            String b = builder.toString();
-            String[] words = b.split("\\s+");
+            String b = builder.toString().toLowerCase();
+            String[] words = b.replaceAll("[,.?:;/]*","").split("\\s+");
+
             Arrays.sort(words);
 
             for (String word : words) {
                 System.out.println(word);
             }
+            Map<String, Long> collect =
+                    Arrays.stream(words).collect(groupingBy(Function.identity(), counting()));
+            for(Map.Entry<String, Long> map : collect.entrySet()){
+                System.out.println(map);
+            }
+
         }
 
         catch(IOException ex) {
             System.out.println(ex.getMessage());
         }
+
     }
 }
 

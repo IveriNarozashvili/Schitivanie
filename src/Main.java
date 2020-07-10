@@ -17,42 +17,32 @@ public class Main {
 
             int a;
             while ((a = reader.read()) != -1) {
-                builder.append((char)a);
+                builder.append((char) a);
             }
 
             String b = builder.toString().toLowerCase();
-            String[] words = b.replaceAll("[,.?:;/]*","").split("\\s+");
+            String[] words = b.replaceAll("[,.?:;/]*", "").split("\\s+");
 
             Arrays.sort(words);
 
             for (String word : words) {
                 System.out.println(word);
             }
-             collect =
+            collect =
                     Arrays.stream(words).collect(groupingBy(Function.identity(), counting()));
-            for(Map.Entry<String, Long> map : collect.entrySet()){
+            for (Map.Entry<String, Long> map : collect.entrySet()) {
 
                 System.out.println(map);
 
             }
 
             System.out.println();
-            collect.entrySet().stream().sorted(Map.Entry.<String, Long>comparingByValue().reversed())
-                    .forEach(System.out::println);
-        }
 
-        catch(IOException ex) {
+            long maxvalue = Collections.max(collect.values());
+            collect.entrySet().stream().filter(e -> e.getValue() == maxvalue).forEach(e -> System.out.println(e.getKey()));
+        } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-        List<Map.Entry<String, Long>> list = new ArrayList<>(collect.entrySet());
-        list.sort(Map.Entry.comparingByValue());
-
-        Map<String, Long> result = new LinkedHashMap<>();
-        for (Map.Entry<String, Long> entry : list) {
-            result.put(entry.getKey(), entry.getValue());
-        }
-
     }
-
-    }
+}
 
